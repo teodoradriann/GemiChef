@@ -7,9 +7,10 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Slider
-import androidx.compose.material3.SliderColors
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -27,6 +28,11 @@ fun TextAndSlider(
     modifier: Modifier = Modifier
 ) {
     var age by rememberSaveable { mutableStateOf("") }
+
+    LaunchedEffect(defaultAge) {
+        age = if (defaultAge == 0) "" else defaultAge.toString()
+    }
+
     OutlinedTextField(
         value = age,
         onValueChange = { input ->
@@ -39,9 +45,11 @@ fun TextAndSlider(
             onAgeSelected(age.toIntOrNull() ?: defaultAge)
         },
         placeholder = {
-            Text(stringResource(R.string.age))
+            if (age.isEmpty()) {
+                Text(stringResource(R.string.enter_age))
+            }
         },
-        label = { Text(stringResource(R.string.enter_age)) },
+        label = { Text(stringResource(R.string.age)) },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         singleLine = true,
     )
@@ -55,17 +63,10 @@ fun TextAndSlider(
                 onAgeSelected(age.toIntOrNull() ?: defaultAge)
             },
             valueRange = 0f..99f,
-            colors = SliderColors(
+            colors = SliderDefaults.colors(
                 thumbColor = MaterialTheme.colorScheme.primary,
                 activeTrackColor = MaterialTheme.colorScheme.primary,
-                inactiveTrackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
-                activeTickColor = MaterialTheme.colorScheme.primary,
-                inactiveTickColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
-                disabledThumbColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
-                disabledActiveTrackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
-                disabledInactiveTrackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
-                disabledActiveTickColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
-                disabledInactiveTickColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
+                inactiveTrackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
             ),
             modifier = Modifier
                 .padding(horizontal = 32.dp)

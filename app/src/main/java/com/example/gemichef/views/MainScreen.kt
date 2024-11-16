@@ -36,7 +36,7 @@ enum class Screens(@StringRes val title: Int){
 
 @Composable
 fun MainScreen(
-    personViewModel: PersonViewModel = viewModel(),
+    personViewModel: PersonViewModel,
     navController: NavHostController = rememberNavController(),
     modifier : Modifier = Modifier
 ) {
@@ -50,7 +50,6 @@ fun MainScreen(
     ) { padding ->
 
         val uiState by personViewModel.uiState.collectAsState()
-
         NavHost(
             navController = navController,
             startDestination = Screens.MainScreen.name,
@@ -79,8 +78,10 @@ fun MainScreen(
                     Spacer(modifier.padding(16.dp))
                     EnterInfo(
                         age = uiState.age ?: 0,
-                        weight = uiState.weight ?: 70,
-                        height = uiState.height ?: 170,
+                        weight = uiState.weight ?: 0,
+                        height = uiState.height ?: 0,
+                        gender = uiState.gender ?: "",
+                        fitnessObjective = uiState.fitnessObjective ?: "",
                         onGenderSelected = {
                             personViewModel.updateGender(it)
                         },
@@ -101,7 +102,7 @@ fun MainScreen(
                     GeminiButton(
                         onClick = {
                             if (personViewModel.sendToGemini()) {
-                                //navController.navigate(Screens.LunchPlannerScreen.name)
+                                navController.navigate(Screens.LunchPlannerScreen.name)
                             } else {
                                 // TODO: add popup telling user to fill in all fields
                             }
@@ -125,7 +126,12 @@ fun MainScreen(
                     )
                 }
             ) {
-                LunchesScreen()
+                LunchesScreen(
+                    uiState.lunchPlan ?: emptyList(),
+                    {
+                        //personViewModel.showMealsForDay(it)
+                    }
+                )
             }
         }
     }
@@ -137,6 +143,7 @@ fun MainScreen(
 @Composable
 fun MainScreenPreview() {
     GemiChefTheme {
-        MainScreen()
+        val personViewModel: PersonViewModel = viewModel()
+        MainScreen(personViewModel)
     }
 }

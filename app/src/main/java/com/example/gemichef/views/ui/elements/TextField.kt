@@ -18,10 +18,11 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun TextField(
     @StringRes text: Int,
+    fitnessObjective: String,
     onFitnessObjectiveSelected: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var objective by rememberSaveable { mutableStateOf("") }
+    var objective by rememberSaveable { mutableStateOf(fitnessObjective) }
     OutlinedTextField(
         value = objective,
         onValueChange = { input ->

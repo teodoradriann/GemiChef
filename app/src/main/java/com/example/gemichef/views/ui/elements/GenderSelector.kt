@@ -17,11 +17,12 @@ import com.example.gemichef.R
 
 @Composable
 fun GenderSelection(
+    gender: String = "",
     onGenderSelected: (String) -> Unit,
     modifier : Modifier = Modifier
 ) {
     val genders = listOf(stringResource(R.string.male), stringResource(R.string.female))
-    var selectedGender by rememberSaveable { mutableStateOf("") }
+    var selectedGender by rememberSaveable { mutableStateOf(gender) }
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally

@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.gemichef.ui.theme.GemiChefTheme
+import com.example.gemichef.viewmodels.PersonViewModel
 import com.example.gemichef.views.MainScreen
 
 class MainActivity : ComponentActivity() {
@@ -13,7 +15,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             GemiChefTheme {
-                MainScreen()
+                val personViewModel: PersonViewModel = viewModel()
+                MainScreen(personViewModel = personViewModel)
             }
         }
     }

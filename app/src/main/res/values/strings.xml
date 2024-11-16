@@ -11,5 +11,7 @@
     <string name="select_weight">Select your weight</string>
     <string name="fitness_objective">Enter your fitness objective</string>
     <string name="home">Home</string>
-    <string name="lunches">Lunches</string>
+    <string name="lunches">Meals</string>
+    <string name="height">height</string>
+    <string name="weight">weight</string>
 </resources>

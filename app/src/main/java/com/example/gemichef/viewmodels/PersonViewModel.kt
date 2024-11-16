@@ -32,6 +32,10 @@ class PersonViewModel : ViewModel() {
         _uiState.value = _uiState.value.copy(fitnessObjective = fitnessObjective)
     }
 
+//    fun showMealsForDay(day: String) : () -> Unit {
+//        return
+//    }
+
     fun sendToGemini() : Boolean {
         if (_uiState.value.gender != null && _uiState.value.age != null &&
             _uiState.value.weight != null && _uiState.value.height != null &&

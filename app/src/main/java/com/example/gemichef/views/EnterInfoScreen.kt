@@ -8,7 +8,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.gemichef.R
@@ -24,6 +23,8 @@ fun EnterInfo(
     age: Int,
     weight: Int,
     height: Int,
+    fitnessObjective: String,
+    gender: String = "",
     onGenderSelected: (String) -> Unit,
     onAgeSelected: (Int) -> Unit,
     onFitnessObjectiveSelected: (String) -> Unit,
@@ -42,13 +43,14 @@ fun EnterInfo(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = modifier
             ) {
-                TextField(R.string.fitness_objective, onFitnessObjectiveSelected, modifier)
+                TextField(R.string.fitness_objective, fitnessObjective, onFitnessObjectiveSelected, modifier)
                 TextAndSlider(age, onAgeSelected, modifier)
-                DropdownMenu(height, stringResource(R.string.select_height), "cm", heights,
+                DropdownMenu(height, R.string.height, "cm", heights,
                     onHeightSelected, modifier)
-                DropdownMenu(weight, stringResource(R.string.select_weight), "kg", weights,
+                DropdownMenu(weight, R.string.weight, "kg", weights,
                     onWeightSelected, modifier)
                 GenderSelection(
+                    gender = gender,
                     onGenderSelected = { onGenderSelected(it) },
                     modifier
                 )
@@ -57,6 +59,7 @@ fun EnterInfo(
     }
 }
 
+
 @Preview
 @Composable
 fun EnterInfoPreview() {
@@ -64,6 +67,8 @@ fun EnterInfoPreview() {
         weight = 0,
         height = 0,
         age = 0,
+        fitnessObjective = "",
+        gender = "",
         onGenderSelected = {},
         onAgeSelected = {},
         onFitnessObjectiveSelected = {},
