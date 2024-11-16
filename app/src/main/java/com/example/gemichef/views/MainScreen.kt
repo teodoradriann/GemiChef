@@ -3,6 +3,7 @@ package com.example.gemichef.views
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -29,7 +30,7 @@ import com.example.gemichef.views.ui.elements.GeminiButton
 import com.example.gemichef.views.ui.elements.TopBar
 
 enum class Screens(@StringRes val title: Int){
-    MainScreen(title = R.string.app_name),
+    MainScreen(title = R.string.main_screen),
     LunchPlannerScreen(title = R.string.lunch_planner)
 }
 
@@ -44,7 +45,7 @@ fun MainScreen(
         navStack.value?.destination?.route ?: Screens.MainScreen.name
     )
     Scaffold(
-        topBar = { TopBar(currentScreen) },
+        topBar = { TopBar(currentScreen)},
         bottomBar = { BottomBar(navController, modifier) }
     ) { padding ->
 
@@ -71,8 +72,11 @@ fun MainScreen(
                 }
             ) {
                 Column (
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+
                 ){
+                    Spacer(modifier.padding(16.dp))
                     EnterInfo(
                         age = uiState.age ?: 0,
                         weight = uiState.weight ?: 70,

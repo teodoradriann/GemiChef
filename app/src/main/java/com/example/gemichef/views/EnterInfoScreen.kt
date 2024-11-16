@@ -34,6 +34,7 @@ fun EnterInfo(
     Column {
         Card(
             elevation = CardDefaults.cardElevation(defaultElevation = 16.dp),
+            border = CardDefaults.outlinedCardBorder(),
             modifier = modifier.padding(horizontal = 16.dp)
         ) {
             Column(
