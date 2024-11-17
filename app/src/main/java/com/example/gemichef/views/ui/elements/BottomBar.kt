@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.twotone.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -55,30 +54,6 @@ fun BottomBar(
                 val currentRoute = navController.currentBackStackEntry?.destination?.route
                 if (currentRoute != Screens.MainScreen.name) {
                     navController.navigate(Screens.MainScreen.name)
-                }
-            },
-            modifier = modifier.offset(y = 8.dp)
-        )
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.TwoTone.Star,
-                    contentDescription = "lunches",
-                    tint = MaterialTheme.colorScheme.onPrimary,
-                    modifier = Modifier.size(32.dp)
-                )
-            },
-            label = {
-                Text(stringResource(R.string.lunches),
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    modifier = modifier.offset(y = (-4).dp))
-            },
-            selected = false,
-            onClick = {
-                val currentRoute = navController.currentBackStackEntry?.destination?.route
-                if (currentRoute != Screens.LunchPlannerScreen.name) {
-                    navController.navigate(Screens.LunchPlannerScreen.name)
                 }
             },
             modifier = modifier.offset(y = 8.dp)

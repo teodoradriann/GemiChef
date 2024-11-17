@@ -32,6 +32,11 @@ class PersonViewModel : ViewModel() {
         _uiState.value = _uiState.value.copy(fitnessObjective = fitnessObjective)
     }
 
+    fun updateSelectedDay(selectedDay: String) {
+        _uiState.value = _uiState.value.copy(selectedDay = selectedDay)
+    }
+
+
 //    fun showMealsForDay(day: String) : () -> Unit {
 //        return
 //    }
