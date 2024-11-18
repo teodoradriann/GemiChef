@@ -104,6 +104,7 @@ class PersonViewModel : ViewModel() {
                 try {
                     val jsonResponse = JSONObject(response)
                     buildMealPlan(jsonResponse)
+                    showMealPlan()
                 } catch (e: Exception) {
                     Log.d("Error", e.toString())
                 }
@@ -142,6 +143,8 @@ class PersonViewModel : ViewModel() {
             val times = mealPlan.getJSONObject(day).keys()
             for (time in times) {
                 val meal = Meal()
+                meal.day = day.toString()
+                meal.time = time.toString()
                 meal.mealName = mealPlan.getJSONObject(day).getJSONObject(time).getString("mealName")
                 meal.ingredients = mealPlan.getJSONObject(day).getJSONObject(time).getJSONArray("ingredients").let {
                     val ingredients = Vector<String>()

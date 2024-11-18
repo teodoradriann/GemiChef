@@ -38,6 +38,5 @@ fun TopBar(
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer
         ),
-
     )
 }

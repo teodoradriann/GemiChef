@@ -72,7 +72,7 @@ fun MainScreen(
                             fontSize = 24.sp) },
                         selected = false,
                         onClick = {
-                            if (uiState.lunchPlan.isNotEmpty()) {
+                            if (uiState.lunchPlan.isNotEmpty() && uiState.selectedDay != item) {
                                 personViewModel.updateSelectedDay(item)
                                 scope.launch {
                                     drawerState.close()
@@ -101,8 +101,6 @@ fun MainScreen(
             )},
             bottomBar = { BottomBar(navController, modifier) }
         ) { padding ->
-
-
             NavHost(
                 navController = navController,
                 startDestination = Screens.MainScreen.name,
