@@ -1,6 +1,7 @@
 package com.example.gemichef.views
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
@@ -152,10 +153,14 @@ fun MainScreen(
                         Spacer(modifier = Modifier.height(32.dp))
                         GeminiButton(
                             onClick = {
-                                if (personViewModel.sendToGemini()) {
-                                    // TODO: add popup telling user to go to lunch planner
-                                } else {
-                                    // TODO: add popup telling user to fill in all fields
+                                personViewModel.sendToGemini { result ->
+                                    if (result) {
+                                        Log.d("Success", "THE MEALS ARE RETURNED");
+                                        // TODO: add popup telling user to go to lunch planner
+                                    } else {
+                                        Log.d("Error", "ERROR SOMETHING HAPPENED");
+                                        // TODO: add popup telling user to go to lunch planner
+                                    }
                                 }
                             },
                             modifier = modifier
@@ -178,7 +183,7 @@ fun MainScreen(
                     }
                 ) {
                     LunchesScreen(
-                        uiState.lunchPlan ?: emptyList(),
+                        uiState.lunchPlan,
                         uiState.selectedDay ?: "Monday"
                     )
                 }

@@ -10,10 +10,12 @@ import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.Content
 import com.google.ai.client.generativeai.type.TextPart
 import com.google.ai.client.generativeai.type.generationConfig
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.util.Vector
 
@@ -97,18 +99,25 @@ class PersonViewModel : ViewModel() {
 
     private val chat = generativeModel.startChat()
 
-    private fun onMealPlanRequest(personData: String) {
-        viewModelScope.launch {
-            val response = chat.sendMessage(personData).text
+    private suspend fun onMealPlanRequest(personData: String): Boolean {
+        return try {
+            val response = withContext(Dispatchers.IO) { chat.sendMessage(personData).text }
             if (!response.isNullOrEmpty()) {
                 try {
                     val jsonResponse = JSONObject(response)
                     buildMealPlan(jsonResponse)
                     showMealPlan()
+                    true
                 } catch (e: Exception) {
-                    Log.d("Error", e.toString())
+                    Log.d("Error", "Parsing error: ${e.message}")
+                    false
                 }
+            } else {
+                false
             }
+        } catch (e: Exception) {
+            Log.d("Error", "Request failed: ${e.message}")
+            false
         }
     }
 
@@ -170,7 +179,7 @@ class PersonViewModel : ViewModel() {
         Log.d("Meal Plan", _uiState.value.lunchPlan.toString())
     }
 
-    fun sendToGemini() : Boolean {
+    fun sendToGemini(onResult: (Boolean) -> Unit) {
         if (_uiState.value.gender != null && _uiState.value.age != null &&
             _uiState.value.weight != null && _uiState.value.height != null &&
             _uiState.value.fitnessObjective != null) {
@@ -179,9 +188,12 @@ class PersonViewModel : ViewModel() {
                     "Weight: ${_uiState.value.weight.toString()}, Height: ${_uiState.value.height.toString()}, " +
                     "Fitness Objective ${_uiState.value.fitnessObjective.toString()}"
 
-            onMealPlanRequest(personData)
-            return true;
+            viewModelScope.launch {
+                val success = onMealPlanRequest(personData)
+                onResult(success)
+            }
+        } else {
+            onResult(false)
         }
-        return false
     }
 }
