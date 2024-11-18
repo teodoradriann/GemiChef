@@ -6,7 +6,7 @@ data class Person (
     val weight: Int? = null,
     val height: Int? = null,
     val fitnessObjective: String? = null,
-    val lunchPlan: MutableList<Meal>? = null,
+    val lunchPlan: MutableList<Meal> = mutableListOf(),
     val selectedDay: String? = null
 )
 

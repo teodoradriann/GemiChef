@@ -72,11 +72,13 @@ fun MainScreen(
                             fontSize = 24.sp) },
                         selected = false,
                         onClick = {
-                            personViewModel.updateSelectedDay(item)
-                            scope.launch {
-                                drawerState.close()
+                            if (uiState.lunchPlan.isNotEmpty()) {
+                                personViewModel.updateSelectedDay(item)
+                                scope.launch {
+                                    drawerState.close()
+                                }
+                                navController.navigate(Screens.LunchPlannerScreen.name)
                             }
-                            navController.navigate(Screens.LunchPlannerScreen.name)
                         },
                     )
                 }
@@ -153,7 +155,7 @@ fun MainScreen(
                         GeminiButton(
                             onClick = {
                                 if (personViewModel.sendToGemini()) {
-                                    navController.navigate(Screens.LunchPlannerScreen.name)
+                                    // TODO: add popup telling user to go to lunch planner
                                 } else {
                                     // TODO: add popup telling user to fill in all fields
                                 }

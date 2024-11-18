@@ -2,15 +2,114 @@ package com.example.gemichef.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.gemichef.models.API_KEY
+import com.example.gemichef.models.Meal
 import com.example.gemichef.models.Person
+import com.google.ai.client.generativeai.GenerativeModel
+import com.google.ai.client.generativeai.type.Content
+import com.google.ai.client.generativeai.type.TextPart
+import com.google.ai.client.generativeai.type.generationConfig
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import org.json.JSONObject
+import java.util.Vector
 
 class PersonViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(Person())
 
     val uiState: StateFlow<Person> = _uiState.asStateFlow()
+
+
+
+    private val generativeModel = GenerativeModel(
+        modelName = "gemini-1.5-flash",
+        systemInstruction = Content(
+            parts = listOf(
+                TextPart(
+                    """
+        You are an experienced nutritionist and body builder. I will send you information about a person in this format:
+        - age
+        - gender
+        - weight
+        - height
+        - fitness objective
+
+        **Your task:**
+
+        - Calculate the person's BMI.
+        - Provide an alimentary plan that satisfies their fitness objective based on that person BMI.
+        - The plan should cover all 7 days of the week.
+        - For each day, provide meals for Breakfast, Lunch, and Dinner.
+        - Each meal should include:
+            - Name of the meal
+            - Ingredients
+            - Calories
+            - Protein
+            - Carbs
+            - Fats
+
+        **Output Format:**
+
+        - **You must provide the output in JSON format**, following this structure:
+        
+        ```json
+        {
+          "mealPlan": {
+            "Monday": {
+              "Breakfast": {
+                "mealName": "...",
+                "ingredients": ["..."],
+                "calories": ...,
+                "protein": ...,
+                "carbs": ...,
+                "fats": ...
+              },
+              "Lunch": { ... },
+              "Dinner": { ... }
+            },
+            "Tuesday": { ... },
+            "...": { ... },
+            "Sunday": { ... }
+          }
+        }
+        ```
+
+        - Use metric units (liters, grams, etc...)
+        - Do not omit any days or meals.
+        - Do not return null values.
+
+        **Note:**
+
+        - Specify days by their names (e.g., Monday, Tuesday).
+        - Ensure all nutritional information is accurate.
+    """.trimIndent(),
+                )
+            )
+        ),
+        generationConfig = generationConfig {
+            responseMimeType = "application/json"
+        },
+        apiKey = API_KEY
+    )
+
+    private val chat = generativeModel.startChat()
+
+    private fun onMealPlanRequest(personData: String) {
+        viewModelScope.launch {
+            val response = chat.sendMessage(personData).text
+            if (!response.isNullOrEmpty()) {
+                try {
+                    val jsonResponse = JSONObject(response)
+                    buildMealPlan(jsonResponse)
+                } catch (e: Exception) {
+                    Log.d("Error", e.toString())
+                }
+            }
+        }
+    }
 
     fun updateGender(gender: String) {
         _uiState.value = _uiState.value.copy(gender = gender)
@@ -36,29 +135,50 @@ class PersonViewModel : ViewModel() {
         _uiState.value = _uiState.value.copy(selectedDay = selectedDay)
     }
 
+    private fun buildMealPlan(jsonObject: JSONObject) {
+        val mealPlan = jsonObject.getJSONObject("mealPlan")
+        val days = mealPlan.keys()
+        for (day in days) {
+            val times = mealPlan.getJSONObject(day).keys()
+            for (time in times) {
+                val meal = Meal()
+                meal.mealName = mealPlan.getJSONObject(day).getJSONObject(time).getString("mealName")
+                meal.ingredients = mealPlan.getJSONObject(day).getJSONObject(time).getJSONArray("ingredients").let {
+                    val ingredients = Vector<String>()
+                    for (i in 0 until it.length()) {
+                        ingredients.add(it.getString(i))
+                    }
+                    ingredients
+                }
+                meal.calories = mealPlan.getJSONObject(day).getJSONObject(time).getDouble("calories")
+                meal.protein = mealPlan.getJSONObject(day).getJSONObject(time).getDouble("protein")
+                meal.carbs = mealPlan.getJSONObject(day).getJSONObject(time).getDouble("carbs")
+                meal.fats = mealPlan.getJSONObject(day).getJSONObject(time).getDouble("fats")
+                addMeal(meal)
+            }
+        }
+    }
 
-//    fun showMealsForDay(day: String) : () -> Unit {
-//        return
-//    }
+    private fun addMeal(meal: Meal) {
+        _uiState.value.lunchPlan.add(meal)
+    }
+
+    private fun showMealPlan() {
+        Log.d("Meal Plan", _uiState.value.lunchPlan.toString())
+    }
 
     fun sendToGemini() : Boolean {
         if (_uiState.value.gender != null && _uiState.value.age != null &&
             _uiState.value.weight != null && _uiState.value.height != null &&
             _uiState.value.fitnessObjective != null) {
-            // log.d pentru toate fields
-            Log.d("Gender", _uiState.value.gender.toString())
-            Log.d("Age", _uiState.value.age.toString())
-            Log.d("Weight", _uiState.value.weight.toString())
-            Log.d("Height", _uiState.value.height.toString())
-            Log.d("Fitness Objective", _uiState.value.fitnessObjective.toString())
+
+            val personData = "Age: ${_uiState.value.age.toString()}, Gender: ${_uiState.value.gender.toString()}, " +
+                    "Weight: ${_uiState.value.weight.toString()}, Height: ${_uiState.value.height.toString()}, " +
+                    "Fitness Objective ${_uiState.value.fitnessObjective.toString()}"
+
+            onMealPlanRequest(personData)
             return true;
         }
-        Log.d("Gender", _uiState.value.gender.toString())
-        Log.d("Age", _uiState.value.age.toString())
-        Log.d("Weight", _uiState.value.weight.toString())
-        Log.d("Height", _uiState.value.height.toString())
-        Log.d("Fitness Objective", _uiState.value.fitnessObjective.toString())
         return false
     }
-
 }
