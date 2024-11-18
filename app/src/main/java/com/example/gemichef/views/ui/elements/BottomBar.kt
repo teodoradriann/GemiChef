@@ -1,5 +1,6 @@
 package com.example.gemichef.views.ui.elements
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
@@ -31,9 +32,11 @@ fun BottomBar(
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.primary,
         contentColor = MaterialTheme.colorScheme.onPrimary,
+        tonalElevation = 4.dp,
         modifier = modifier
-            .clip(RoundedCornerShape(60.dp))
-            .height(88.dp)
+            .fillMaxWidth()
+            .height(64.dp)
+            .clip(RoundedCornerShape(topStart = 64.dp, topEnd = 64.dp))
     ) {
         NavigationBarItem(
             icon = {
@@ -41,14 +44,14 @@ fun BottomBar(
                     imageVector = Icons.Default.Home,
                     contentDescription = "Home",
                     tint = MaterialTheme.colorScheme.onPrimary,
-                    modifier = Modifier.size(32.dp)
+                    modifier = Modifier.size(24.dp)
                 )
             },
             label = { Text(
                 stringResource(R.string.home),
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onPrimary,
-                modifier = modifier.offset(y = (-4).dp))},
+                modifier = modifier.offset(y = (-8).dp))},
             selected = false,
             onClick = {
                 val currentRoute = navController.currentBackStackEntry?.destination?.route

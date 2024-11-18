@@ -57,7 +57,6 @@ class PersonViewModel : ViewModel() {
 
         - **You must provide the output in JSON format**, following this structure:
         
-        ```json
         {
           "mealPlan": {
             "Monday": {
@@ -77,7 +76,6 @@ class PersonViewModel : ViewModel() {
             "Sunday": { ... }
           }
         }
-        ```
 
         - Use metric units (liters, grams, etc...)
         - Do not omit any days or meals.

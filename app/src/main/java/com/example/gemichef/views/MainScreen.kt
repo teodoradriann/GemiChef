@@ -1,6 +1,5 @@
 package com.example.gemichef.views
 
-import android.annotation.SuppressLint
 import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContentTransitionScope
@@ -12,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
@@ -47,7 +47,6 @@ enum class Screens(@StringRes val title: Int){
     LunchPlannerScreen(title = R.string.lunch_planner)
 }
 
-@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun MainScreen(
     personViewModel: PersonViewModel,
@@ -70,7 +69,8 @@ fun MainScreen(
                 days.forEach { item ->
                     NavigationDrawerItem(
                         label = { Text(text = item,
-                            fontSize = 24.sp) },
+                            fontSize = 24.sp,
+                                style = MaterialTheme.typography.bodyLarge)},
                         selected = false,
                         onClick = {
                             if (uiState.lunchPlan.isNotEmpty() && uiState.selectedDay != item) {
@@ -83,6 +83,9 @@ fun MainScreen(
                         },
                     )
                 }
+                HorizontalDivider()
+                Text("Fitness Informations", modifier = Modifier.padding(16.dp),
+                    fontSize = 32.sp)
             }
         },
         drawerState = drawerState
@@ -112,13 +115,13 @@ fun MainScreen(
                     enterTransition = {
                         slideIntoContainer(
                             AnimatedContentTransitionScope.SlideDirection.Right,
-                            animationSpec = tween(700)
+                            animationSpec = tween(500)
                         )
                     },
                     exitTransition = {
                         slideOutOfContainer(
                             AnimatedContentTransitionScope.SlideDirection.Left,
-                            animationSpec = tween(700)
+                            animationSpec = tween(500)
                         )
                     }
                 ) {
