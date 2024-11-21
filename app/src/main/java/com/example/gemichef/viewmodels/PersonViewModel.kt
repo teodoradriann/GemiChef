@@ -1,6 +1,8 @@
 package com.example.gemichef.viewmodels
 
+import android.annotation.SuppressLint
 import android.util.Log
+import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gemichef.models.API_KEY
@@ -24,6 +26,8 @@ class PersonViewModel : ViewModel() {
 
     val uiState: StateFlow<Person> = _uiState.asStateFlow()
 
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
 
     private val generativeModel = GenerativeModel(
@@ -187,7 +191,9 @@ class PersonViewModel : ViewModel() {
                     "Fitness Objective ${_uiState.value.fitnessObjective.toString()}"
 
             viewModelScope.launch {
+                _isLoading.value = true
                 val success = onMealPlanRequest(personData)
+                _isLoading.value = false
                 onResult(success)
             }
         } else {

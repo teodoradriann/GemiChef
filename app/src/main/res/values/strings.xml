@@ -14,4 +14,8 @@
     <string name="lunches">Meals</string>
     <string name="height">height</string>
     <string name="weight">weight</string>
+    <string name="succes_message">I have recieved your informations.\nPlease wait until I tailor a suitable Meal Plan for your needs and then check it out!</string>
+    <string name="error_message">Something unexpected happened. I am sorry, try again.</string>
+    <string name="success">Success!</string>
+    <string name ="error">Something happened...</string>
 </resources>

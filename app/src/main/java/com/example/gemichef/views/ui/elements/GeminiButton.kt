@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun GeminiButton(
+    text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -23,7 +24,7 @@ fun GeminiButton(
             Row (
                 verticalAlignment = Alignment.CenterVertically
             ){
-                Text("Send to Gemini",
+                Text(text,
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onPrimary,
                     modifier = modifier.padding(4.dp)
@@ -35,5 +36,5 @@ fun GeminiButton(
 @Preview
 @Composable
 fun GeminiButtonPreview() {
-    GeminiButton(onClick = {})
+
 }
