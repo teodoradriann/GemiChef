@@ -144,6 +144,10 @@ class PersonViewModel : ViewModel() {
     }
 
     fun updateSelectedDay(selectedDay: String) {
+        if (selectedDay == "Home") {
+            _uiState.value = _uiState.value.copy(selectedDay = null)
+            return
+        }
         _uiState.value = _uiState.value.copy(selectedDay = selectedDay)
     }
 
@@ -185,6 +189,10 @@ class PersonViewModel : ViewModel() {
         if (_uiState.value.gender != null && _uiState.value.age != null &&
             _uiState.value.weight != null && _uiState.value.height != null &&
             _uiState.value.fitnessObjective != null) {
+
+            if (_uiState.value.lunchPlan != emptyList<Meal>()) {
+                _uiState.value.lunchPlan.clear()
+            }
 
             val personData = "Age: ${_uiState.value.age.toString()}, Gender: ${_uiState.value.gender.toString()}, " +
                     "Weight: ${_uiState.value.weight.toString()}, Height: ${_uiState.value.height.toString()}, " +

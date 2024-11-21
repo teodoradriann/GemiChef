@@ -119,7 +119,11 @@ fun MainScreen(
                     }
                 }
             )},
-            bottomBar = { BottomBar(navController, modifier) }
+            bottomBar = { BottomBar(
+                navController,
+                onClick = { personViewModel.updateSelectedDay("Home") },
+                modifier)
+            }
         ) { padding ->
             NavHost(
                 navController = navController,

@@ -27,6 +27,7 @@ import com.example.gemichef.views.Screens
 @Composable
 fun BottomBar(
     navController: NavHostController,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     NavigationBar(
@@ -54,6 +55,7 @@ fun BottomBar(
                 modifier = modifier.offset(y = (-8).dp))},
             selected = false,
             onClick = {
+                onClick()
                 val currentRoute = navController.currentBackStackEntry?.destination?.route
                 if (currentRoute != Screens.MainScreen.name) {
                     navController.navigate(Screens.MainScreen.name)
@@ -68,6 +70,6 @@ fun BottomBar(
 @Composable
 fun BottomBarPreview() {
     GemiChefTheme {
-        BottomBar(rememberNavController())
+
     }
 }
