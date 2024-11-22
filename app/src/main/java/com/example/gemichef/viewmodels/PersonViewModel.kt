@@ -151,6 +151,16 @@ class PersonViewModel : ViewModel() {
         _uiState.value = _uiState.value.copy(selectedDay = selectedDay)
     }
 
+    fun addToFavourites(meal: Meal) {
+        _uiState.value.favourites.add(meal)
+        showFavs()
+    }
+
+    fun removeFromFavourites(meal: Meal) {
+     _uiState.value.favourites.remove(meal)
+        showFavs()
+    }
+
     private fun buildMealPlan(jsonObject: JSONObject) {
         val mealPlan = jsonObject.getJSONObject("mealPlan")
         val days = mealPlan.keys()
@@ -184,6 +194,11 @@ class PersonViewModel : ViewModel() {
     private fun showMealPlan() {
         Log.d("Meal Plan", _uiState.value.lunchPlan.toString())
     }
+
+    private fun showFavs() {
+        Log.d("Favourites", _uiState.value.favourites.toString())
+    }
+
 
     fun sendToGemini(onResult: (Boolean) -> Unit) {
         if (_uiState.value.gender != null && _uiState.value.age != null &&

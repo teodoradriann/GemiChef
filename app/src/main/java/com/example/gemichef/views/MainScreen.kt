@@ -27,6 +27,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -77,7 +78,7 @@ fun MainScreen(
         drawerContent = {
             ModalDrawerSheet {
                 Text("Planned Meals", modifier = Modifier.padding(16.dp),
-                    fontSize = 32.sp)
+                    fontSize = 28.sp)
                 HorizontalDivider()
                 days.forEach { item ->
                     NavigationDrawerItem(
@@ -96,6 +97,25 @@ fun MainScreen(
                         },
                     )
                 }
+                HorizontalDivider()
+                Text("Personal Informations", modifier = Modifier.padding(16.dp),
+                    fontSize = 28.sp)
+                NavigationDrawerItem(
+                    label = {
+                        Text (text = stringResource(R.string.favourites),
+                        fontSize = 24.sp,
+                        style = MaterialTheme.typography.bodyLarge)},
+                    selected = false,
+                    onClick = {
+                        if (uiState.lunchPlan.isNotEmpty() && uiState.selectedDay != "Favourites") {
+                            personViewModel.updateSelectedDay("Favourites")
+                            scope.launch {
+                                drawerState.close()
+                            }
+                            navController.navigate(Screens.LunchPlannerScreen.name)
+                        }
+                    }
+                    )
                 // TODO: Add Fitness Info
                 /*
                 HorizontalDivider()
@@ -223,8 +243,8 @@ fun MainScreen(
                     }
                 ) {
                     LunchesScreen(
-                        uiState.lunchPlan,
-                        uiState.selectedDay ?: "Monday"
+                        personViewModel,
+                        uiState.selectedDay ?: ""
                     )
                 }
             }

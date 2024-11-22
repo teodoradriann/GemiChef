@@ -1,10 +1,15 @@
 package com.example.gemichef.views
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
@@ -13,18 +18,27 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import com.example.gemichef.models.Meal
-import com.example.gemichef.ui.theme.GemiChefTheme
+import com.example.gemichef.viewmodels.PersonViewModel
 import com.example.gemichef.views.ui.elements.MealCard
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun LunchesScreen(
-    meals: List<Meal>,
+    personViewModel: PersonViewModel,
     day: String,
     modifier: Modifier = Modifier
 ){
+    val uiState by personViewModel.uiState.collectAsState()
+
+    val lunchPlan = if (day != "Favourites") {
+        uiState.lunchPlan
+    } else {
+        uiState.favourites
+    }
+
     Column (
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxSize()
     ){
         Text(day,
             style = TextStyle(
@@ -35,11 +49,23 @@ fun LunchesScreen(
             )
         )
         LazyColumn(
-            modifier = modifier
+            modifier = modifier.fillMaxWidth()
         ) {
-            items(meals) {
-                if (it.day == day) {
-                    MealCard(meal = it)
+            items(lunchPlan) { meal ->
+                if (meal.day == day) {
+                    MealCard(
+                        meal = meal,
+                        favourites = uiState.favourites,
+                        favouritesAdd = { personViewModel.addToFavourites(meal) },
+                        favouritesDelete = { personViewModel.removeFromFavourites(meal) }
+                    )
+                } else if (day == "Favourites") {
+                    MealCard(
+                        meal = meal,
+                        favourites = uiState.favourites,
+                        favouritesAdd = { personViewModel.addToFavourites(meal) },
+                        favouritesDelete = { personViewModel.removeFromFavourites(meal) }
+                    )
                 }
             }
         }
@@ -50,10 +76,5 @@ fun LunchesScreen(
 @Preview
 @Composable
 fun LunchesScreenPreview() {
-    GemiChefTheme {
-        LunchesScreen(
-            emptyList(),
-            "Monday"
-        )
-    }
+
 }
