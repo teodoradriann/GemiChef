@@ -13,7 +13,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.gemichef.R
 
 @Composable
 fun TextField(
@@ -34,5 +36,15 @@ fun TextField(
             .widthIn(min = 279.dp, max = 279.dp)
             .wrapContentHeight(),
         maxLines = 4
+    )
+}
+
+@Preview
+@Composable
+fun TextFieldPreview() {
+    TextField(
+        text = R.string.fitness_objective,
+        fitnessObjective = "",
+        onFitnessObjectiveSelected = {}
     )
 }

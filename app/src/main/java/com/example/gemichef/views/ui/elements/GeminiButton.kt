@@ -36,5 +36,8 @@ fun GeminiButton(
 @Preview
 @Composable
 fun GeminiButtonPreview() {
-
+    GeminiButton(
+        text = "Button",
+        onClick = {}
+    )
 }
