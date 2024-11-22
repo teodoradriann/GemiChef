@@ -19,4 +19,9 @@
     <string name="success">Success!</string>
     <string name ="error">Something happened...</string>
     <string name ="favourites">Favourites</string>
+    <string name ="remv_fav">Remove from favourites</string>
+    <string name = "add_fav">Add to favourites</string>
+    <string name ="menu_icon">Menu Icon</string>
+    <string name = "ok">Ok</string>
+    <string name ="trigger_dropdown">Trigger dropdown</string>
 </resources>

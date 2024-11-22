@@ -19,7 +19,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.gemichef.R
 import com.example.gemichef.ui.theme.GemiChefTheme
 import com.example.gemichef.views.Screens
@@ -43,7 +42,7 @@ fun BottomBar(
             icon = {
                 Icon(
                     imageVector = Icons.Default.Home,
-                    contentDescription = "Home",
+                    contentDescription = stringResource(R.string.home),
                     tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier.size(24.dp)
                 )

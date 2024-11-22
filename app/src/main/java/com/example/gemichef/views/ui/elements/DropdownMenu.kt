@@ -22,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.gemichef.R
 
 @Composable
 fun DropdownMenu(
@@ -53,7 +54,7 @@ fun DropdownMenu(
             trailingIcon = {
                 Icon(
                     imageVector = Icons.Default.ArrowDropDown,
-                    contentDescription = "trigger dropdown",
+                    contentDescription = stringResource(R.string.trigger_dropdown),
                     modifier = Modifier.clickable { expanded = true }
                 )
             }

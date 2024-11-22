@@ -1,8 +1,6 @@
 package com.example.gemichef.viewmodels
 
-import android.annotation.SuppressLint
 import android.util.Log
-import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gemichef.models.API_KEY
@@ -153,12 +151,10 @@ class PersonViewModel : ViewModel() {
 
     fun addToFavourites(meal: Meal) {
         _uiState.value.favourites.add(meal)
-        showFavs()
     }
 
     fun removeFromFavourites(meal: Meal) {
-     _uiState.value.favourites.remove(meal)
-        showFavs()
+        _uiState.value.favourites.remove(meal)
     }
 
     private fun buildMealPlan(jsonObject: JSONObject) {

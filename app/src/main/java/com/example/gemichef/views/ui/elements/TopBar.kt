@@ -12,6 +12,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.example.gemichef.R
 import com.example.gemichef.views.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -30,7 +31,7 @@ fun TopBar(
             IconButton(onClick = onMenuClicked) {
                 Icon(
                     imageVector = Icons.Default.Menu,
-                    contentDescription = "Menu Icon"
+                    contentDescription = stringResource(R.string.menu_icon)
                 )
             }
         },

@@ -12,11 +12,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.gemichef.R
 import com.example.gemichef.models.Meal
 import java.util.Vector
 
@@ -28,7 +30,15 @@ fun MealCard(
     favouritesDelete: (Meal) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val ingredients = meal.ingredients?.joinToString(separator = "\n") ?: ""
+
+    val ingredients = StringBuilder()
+    if (meal.ingredients != null) {
+        for (ingredient in meal.ingredients!!) {
+            ingredients.append(ingredient)
+            ingredients.append("\n")
+        }
+    }
+
     var isFavourite by rememberSaveable { mutableStateOf(favourites.contains(meal)) }
     Card(
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
@@ -66,7 +76,7 @@ fun MealCard(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = ingredients,
+                    text = ingredients.toString(),
                     style = TextStyle(
                         color = Color.DarkGray,
                         fontSize = 14.sp,
@@ -103,7 +113,7 @@ fun MealCard(
             ) {
                 Icon(
                     imageVector = Icons.Default.Star,
-                    contentDescription = if (favourites.contains(meal)) "Remove from favorites" else "Add to favorites",
+                    contentDescription = if (favourites.contains(meal)) stringResource(R.string.remv_fav) else stringResource(R.string.add_fav),
                     tint = if (isFavourite) Color.Yellow else Color.Gray
                 )
             }
